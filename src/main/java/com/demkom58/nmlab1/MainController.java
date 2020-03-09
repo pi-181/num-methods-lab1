@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import org.mariuszgromada.math.mxparser.Expression;
 import org.mariuszgromada.math.mxparser.Function;
 
+import java.util.Objects;
+
 public class MainController extends GuiController {
 
     @FXML
@@ -28,7 +30,7 @@ public class MainController extends GuiController {
     @FXML
     private TextField accuracyInput;
     @FXML
-    private LineChart<Double, Double> lineChart;
+    private ExtendedLineChart<Double, Double> lineChart;
 
     private Function function;
     private Expression expression;
@@ -44,10 +46,16 @@ public class MainController extends GuiController {
     private XYChart.Series<Double, Double> functionSeries =
             new XYChart.Series<>("Функція", FXCollections.observableArrayList());
 
+    private XYChart.Series<Double, Double> markSeries =
+            new XYChart.Series<>("Відмітка", FXCollections.observableArrayList());
+
     @Override
     public void init() {
         super.init();
+
         lineChart.getData().add(functionSeries);
+        lineChart.getData().add(markSeries);
+
         read();
     }
 
@@ -67,6 +75,8 @@ public class MainController extends GuiController {
             this.b = x;
         else
             this.a = x;
+
+        lineChart.addVerticalValueMarker(new XYChart.Data<>(x, 0d));
 
         if (Math.abs(b - a) <= precision) {
             showResult(iteration, precision, x);
@@ -93,6 +103,12 @@ public class MainController extends GuiController {
         double m = (fb - fa) / (b - a);
         double diferencia;
 
+        final XYChart.Series<Double, Double> iterationSeries = new XYChart.Series<>();
+        final ObservableList<XYChart.Data<Double, Double>> data = iterationSeries.getData();
+        iterationSeries.setName("Ітерація " + iteration);
+        data.addAll(new XYChart.Data<>(a, fa), new XYChart.Data<>(b, fb));
+        lineChart.getData().add(iterationSeries);
+
         double x = ((-fa + m * a) / m);
         if ((fa * function.calculate(x)) < 0) {
             diferencia = Math.abs(b - x);
@@ -101,6 +117,7 @@ public class MainController extends GuiController {
             diferencia = Math.abs(a - x);
             a = x;
         }
+        lineChart.addVerticalValueMarker(new XYChart.Data<>(x, 0d));
 
         if (((function.calculate(x)) <= precision) && (diferencia <= precision)) {
             showResult(iteration, precision, x);
@@ -113,6 +130,7 @@ public class MainController extends GuiController {
         iteration++;
     }
 
+    @SuppressWarnings("unchecked")
     @FXML
     public void tangent(MouseEvent event) {
         try {
@@ -133,6 +151,17 @@ public class MainController extends GuiController {
             read();
             return;
         }
+
+        final XYChart.Series<Double, Double> iterationSeries = new XYChart.Series<>();
+        final ObservableList<XYChart.Data<Double, Double>> data = iterationSeries.getData();
+        iterationSeries.setName("Ітерація " + iteration);
+
+        if (a <= b)
+            data.addAll(new XYChart.Data<>(a, fa), new XYChart.Data<>(b, 0d));
+        else
+            data.addAll(new XYChart.Data<>(b, 0d), new XYChart.Data<>(a, fa));
+
+        lineChart.getData().add(iterationSeries);
 
         b = a - (fa / calculate);
         if ((Math.abs(b - a) <= precision)) {
@@ -183,6 +212,9 @@ public class MainController extends GuiController {
 
     private void fillFunctionSeries(Double intervalA, Double intervalB) {
         lineChart.getData().add(functionSeries);
+        lineChart.getData().add(markSeries);
+        lineChart.removeHorizontalValueMarkers();
+        lineChart.removeVerticalValueMarkers();
         functionSeries.setData(FXCollections.observableArrayList());
 
         double y, x;
@@ -195,14 +227,13 @@ public class MainController extends GuiController {
         }
 
 
-        final XYChart.Data<Double, Double> a = new XYChart.Data<>(intervalA, 0d);
-        final XYChart.Data<Double, Double> b = new XYChart.Data<>(intervalB, 0d);
-        final XYChart.Series<Double, Double> intervalSeries = new XYChart.Series<>();
-        intervalSeries.setName("Проміжок");
+        final XYChart.Series<Double, Double> intervalSeries =
+                new XYChart.Series<>("Проміжок", FXCollections.observableArrayList());
 
-        final ObservableList<XYChart.Data<Double, Double>> data = intervalSeries.getData();
-        data.add(a);
-        data.add(b);
+        intervalSeries.getData().addAll(
+                new XYChart.Data<>(intervalA, 0d),
+                new XYChart.Data<>(intervalB, 0d)
+        );
 
         lineChart.getData().add(intervalSeries);
     }
@@ -236,7 +267,7 @@ public class MainController extends GuiController {
             return;
         }
 
-        final String bIntervalText = fromAInput.getText();
+        final String bIntervalText = toBInput.getText();
         try {
             bInterval = bIntervalText.isBlank()
                     ? Double.parseDouble(toBInput.getPromptText())
@@ -284,7 +315,7 @@ public class MainController extends GuiController {
         Alert alert = new Alert(type, message, types);
         alert.setHeaderText(header);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.show();
+        alert.showAndWait();
     }
 
 
