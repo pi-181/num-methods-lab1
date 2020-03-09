@@ -11,11 +11,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 import org.mariuszgromada.math.mxparser.Expression;
 import org.mariuszgromada.math.mxparser.Function;
 
 public class MainController extends GuiController {
-
     @FXML
     private TextField functionInput;
     @FXML
@@ -145,6 +145,7 @@ public class MainController extends GuiController {
         final ObservableList<XYChart.Data<Double, Double>> data = iterationSeries.getData();
         iterationSeries.setName("Ітерація " + iteration);
 
+        lineChart.addVerticalValueMarker(new XYChart.Data<>(b, 0d));
         if (a <= b)
             data.addAll(new XYChart.Data<>(a, fa), new XYChart.Data<>(b, 0d));
         else
@@ -208,10 +209,19 @@ public class MainController extends GuiController {
         double y, x;
         x = intervalA - 5.0;
 
-        for (int i = 0; i < 2 * (intervalB * 10 - intervalA * 10) + 50; i++) {
+        final double end = 2 * (intervalB * 10 - intervalA * 10) + 50;
+        for (int i = 0; i < end; i++) {
             x = x + 0.1;
             y = function.calculate(x);
-            functionSeries.getData().add(new XYChart.Data<>(x, y));
+            final XYChart.Data<Double, Double> data = new XYChart.Data<>(x, y);
+
+            if (i != 0 && i != end - 1) {
+                final Rectangle rectangle = new Rectangle(0, 0);
+                rectangle.setVisible(false);
+                data.setNode(rectangle);
+            }
+
+            functionSeries.getData().add(data);
         }
 
 
