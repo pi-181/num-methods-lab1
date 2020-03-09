@@ -1,23 +1,18 @@
 package com.demkom58.nmlab1;
 
+import com.demkom58.divine.chart.ExtendedLineChart;
 import com.demkom58.divine.gui.GuiController;
+import com.demkom58.divine.util.AlertUtil;
 import com.demkom58.divine.util.Language;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
-import org.jetbrains.annotations.NotNull;
 import org.mariuszgromada.math.mxparser.Expression;
 import org.mariuszgromada.math.mxparser.Function;
-
-import java.util.Objects;
 
 public class MainController extends GuiController {
 
@@ -58,7 +53,7 @@ public class MainController extends GuiController {
         try {
             check();
         } catch (Exception e) {
-            showErrorMessage(e);
+            AlertUtil.showErrorMessage(e);
             return;
         }
 
@@ -88,7 +83,7 @@ public class MainController extends GuiController {
         try {
             check();
         } catch (Exception e) {
-            showErrorMessage(e);
+            AlertUtil.showErrorMessage(e);
             return;
         }
 
@@ -130,7 +125,7 @@ public class MainController extends GuiController {
         try {
             check();
         } catch (Exception e) {
-            showErrorMessage(e);
+            AlertUtil.showErrorMessage(e);
             return;
         }
 
@@ -141,7 +136,7 @@ public class MainController extends GuiController {
 
         final double calculate = ex.calculate();
         if (calculate == 0) {
-            showErrorMessage("Помилка. Ділення на нуль.");
+            AlertUtil.showErrorMessage("Помилка. Ділення на нуль.");
             read();
             return;
         }
@@ -177,14 +172,14 @@ public class MainController extends GuiController {
 
     private void showResult(int iteration, double precision, double result) {
         final String plural = Language.plural(iteration, "ітерацію", "ітерації", "ітерацій");
-        showInfoMessage(
+        AlertUtil.showInfoMessage(
                 "Результат знайдений за " + iteration + " " + plural + ".",
                 "Результат з точністю " + precision + " дорівнює " + result
         );
     }
 
     private void showProgress(int iteration, double result) {
-        showInfoMessage(
+        AlertUtil.showInfoMessage(
                 "Ітерація: " + iteration + ".",
                 "Орієнтовний корінь: " + result + "."
         );
@@ -291,25 +286,5 @@ public class MainController extends GuiController {
         if (function.checkSyntax())
             fillFunctionSeries(aInterval, bInterval);
     }
-
-    private void showErrorMessage(@NotNull final Exception exception) {
-        showErrorMessage(exception.getMessage());
-    }
-
-    private void showErrorMessage(@NotNull final String error) {
-        alert(Alert.AlertType.ERROR, "Помилка", error, ButtonType.OK);
-    }
-
-    private void showInfoMessage(@NotNull final String header, @NotNull final String info) {
-        alert(Alert.AlertType.INFORMATION, header, info, ButtonType.OK);
-    }
-
-    private void alert(Alert.AlertType type, String header, String message, ButtonType... types) {
-        Alert alert = new Alert(type, message, types);
-        alert.setHeaderText(header);
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.showAndWait();
-    }
-
 
 }

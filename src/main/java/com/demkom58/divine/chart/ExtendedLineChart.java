@@ -1,4 +1,4 @@
-package com.demkom58.nmlab1;
+package com.demkom58.divine.chart;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.NamedArg;
