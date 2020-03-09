@@ -2,7 +2,11 @@ package com.demkom58.nmlab1;
 
 import com.demkom58.divine.gui.GuiController;
 import com.demkom58.divine.util.Language;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
@@ -23,6 +27,8 @@ public class MainController extends GuiController {
     private TextField toBInput;
     @FXML
     private TextField accuracyInput;
+    @FXML
+    private LineChart<Double, Double> lineChart;
 
     private Function function;
     private Expression expression;
@@ -35,9 +41,13 @@ public class MainController extends GuiController {
 
     private int iteration = 1;
 
+    private XYChart.Series<Double, Double> functionSeries =
+            new XYChart.Series<>("Функція", FXCollections.observableArrayList());
+
     @Override
     public void init() {
         super.init();
+        lineChart.getData().add(functionSeries);
         read();
     }
 
@@ -171,14 +181,46 @@ public class MainController extends GuiController {
             throw new IllegalStateException("Перевірте задану точність.");
     }
 
+    private void fillFunctionSeries(Double intervalA, Double intervalB) {
+        lineChart.getData().add(functionSeries);
+        functionSeries.setData(FXCollections.observableArrayList());
+
+        double y, x;
+        x = intervalA - 5.0;
+
+        for (int i = 0; i < 2 * (intervalB * 10 - intervalA * 10) + 50; i++) {
+            x = x + 0.1;
+            y = function.calculate(x);
+            functionSeries.getData().add(new XYChart.Data<>(x, y));
+        }
+
+
+        final XYChart.Data<Double, Double> a = new XYChart.Data<>(intervalA, 0d);
+        final XYChart.Data<Double, Double> b = new XYChart.Data<>(intervalB, 0d);
+        final XYChart.Series<Double, Double> intervalSeries = new XYChart.Series<>();
+        intervalSeries.setName("Проміжок");
+
+        final ObservableList<XYChart.Data<Double, Double>> data = intervalSeries.getData();
+        data.add(a);
+        data.add(b);
+
+        lineChart.getData().add(intervalSeries);
+    }
+
     private void read() {
         iteration = 1;
+
+        if (!lineChart.getData().isEmpty())
+            lineChart.setData(FXCollections.observableArrayList());
 
         String functionText = functionInput.getText();
         if (functionText.isBlank()) {
             final String promptText = functionInput.getPromptText();
             functionText = promptText.substring(promptText.indexOf("f(x) = "));
         }
+
+        if (!functionText.isEmpty() && !functionText.startsWith("f(x) = "))
+            return;
 
         function = new Function(functionText);
         expression = new Expression(functionText.substring("f(x) = ".length()));
@@ -221,6 +263,9 @@ public class MainController extends GuiController {
 
         a = aInterval;
         b = bInterval;
+
+        if (function.checkSyntax())
+            fillFunctionSeries(aInterval, bInterval);
     }
 
     private void showErrorMessage(@NotNull final Exception exception) {
@@ -241,5 +286,6 @@ public class MainController extends GuiController {
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.show();
     }
+
 
 }

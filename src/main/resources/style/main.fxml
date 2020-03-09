@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="135.0" prefWidth="568.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demkom58.nmlab1.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="568.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demkom58.nmlab1.MainController">
    <children>
       <Button layoutX="7.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#bisection" prefHeight="25.0" prefWidth="236.0" text="Метод бісекції (діхотомії, bisecction)" />
       <Button layoutX="7.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#secant" prefHeight="25.0" prefWidth="236.0" text="Метод хорд (secant)" />
@@ -22,5 +24,14 @@
       <TextField fx:id="accuracyInput" layoutX="316.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#onChanged" prefHeight="25.0" prefWidth="242.0" promptText="0.1" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="258.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="57.0" text="Точність" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="408.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="57.0" text="до b =" />
+      <Separator layoutX="1.0" layoutY="134.0" prefHeight="5.0" prefWidth="568.0" />
+      <LineChart fx:id="lineChart" layoutY="139.0" prefHeight="395.0" prefWidth="554.0" title="Графік">
+        <xAxis>
+          <NumberAxis label="x" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis label="f(x)" side="LEFT" />
+        </yAxis>
+      </LineChart>
    </children>
 </AnchorPane>
