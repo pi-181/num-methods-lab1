@@ -8,9 +8,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="135.0" prefWidth="568.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demkom58.nmlab1.MainController">
    <children>
-      <Button layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#bisection" prefHeight="25.0" prefWidth="229.0" text="Метод бісекції (діхотомії, bisecction)" />
-      <Button layoutX="14.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#secant" prefHeight="25.0" prefWidth="229.0" text="Метод хорд (secant)" />
-      <Button layoutX="14.0" layoutY="103.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#tangent" prefHeight="25.0" prefWidth="229.0" text="Метод дотичних (Ньютона, tangent)" />
+      <Button layoutX="7.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#bisection" prefHeight="25.0" prefWidth="236.0" text="Метод бісекції (діхотомії, bisecction)" />
+      <Button layoutX="7.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#secant" prefHeight="25.0" prefWidth="236.0" text="Метод хорд (secant)" />
+      <Button layoutX="7.0" layoutY="103.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#tangent" prefHeight="25.0" prefWidth="236.0" text="Метод дотичних (Ньютона, tangent)" />
       <TextField fx:id="functionInput" layoutX="316.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#onChanged" prefHeight="25.0" prefWidth="242.0" promptText="Приклад: f(x) = x^2 - 9" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="256.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="57.0" text="Функція" />
       <Separator layoutX="247.0" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="135.0" prefWidth="5.0" />
