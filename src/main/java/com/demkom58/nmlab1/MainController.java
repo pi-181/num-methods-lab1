@@ -46,16 +46,10 @@ public class MainController extends GuiController {
     private XYChart.Series<Double, Double> functionSeries =
             new XYChart.Series<>("Функція", FXCollections.observableArrayList());
 
-    private XYChart.Series<Double, Double> markSeries =
-            new XYChart.Series<>("Відмітка", FXCollections.observableArrayList());
-
     @Override
     public void init() {
         super.init();
-
         lineChart.getData().add(functionSeries);
-        lineChart.getData().add(markSeries);
-
         read();
     }
 
@@ -212,7 +206,6 @@ public class MainController extends GuiController {
 
     private void fillFunctionSeries(Double intervalA, Double intervalB) {
         lineChart.getData().add(functionSeries);
-        lineChart.getData().add(markSeries);
         lineChart.removeHorizontalValueMarkers();
         lineChart.removeVerticalValueMarkers();
         functionSeries.setData(FXCollections.observableArrayList());
