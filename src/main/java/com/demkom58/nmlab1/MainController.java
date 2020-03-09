@@ -1,6 +1,7 @@
 package com.demkom58.nmlab1;
 
 import com.demkom58.divine.gui.GuiController;
+import com.demkom58.divine.util.Language;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -32,7 +33,7 @@ public class MainController extends GuiController {
     private double a;
     private double b;
 
-    private int iteration = 0;
+    private int iteration = 1;
 
     @Override
     public void init() {
@@ -58,15 +59,12 @@ public class MainController extends GuiController {
             this.a = x;
 
         if (Math.abs(b - a) <= precision) {
-            showInfoMessage("Результат знайдений.", "Результат з точністю " + precision + " дорівнює " + x);
+            showResult(iteration, precision, x);
             read();
             return;
         }
 
-        showInfoMessage(
-                "Ітерація: " + iteration + ".",
-                "Орієнтовний корінь: " + x + "."
-        );
+        showProgress(iteration, x);
 
         iteration++;
     }
@@ -95,15 +93,12 @@ public class MainController extends GuiController {
         }
 
         if (((function.calculate(x)) <= precision) && (diferencia <= precision)) {
-            showInfoMessage("Результат знайдений.", "Результат з точністю " + precision + " дорівнює " + x);
+            showResult(iteration, precision, x);
             read();
             return;
         }
 
-        showInfoMessage(
-                "Ітерація: " + iteration + ".",
-                "Орієнтовний корінь: " + x + "."
-        );
+        showProgress(iteration, x);
 
         iteration++;
     }
@@ -131,15 +126,12 @@ public class MainController extends GuiController {
 
         b = a - (fa / calculate);
         if ((Math.abs(b - a) <= precision)) {
-            showInfoMessage("Результат знайдений.", "Результат з точністю " + precision + " дорівнює " + b);
+            showResult(iteration, precision, b);
             read();
             return;
         }
 
-        showInfoMessage(
-                "Ітерація: " + iteration + ".",
-                "Орієнтовний корінь: " + b + "."
-        );
+        showProgress(iteration, b);
 
         a = b;
         iteration++;
@@ -148,6 +140,21 @@ public class MainController extends GuiController {
     @FXML
     public void onChanged(KeyEvent event) {
         read();
+    }
+
+    private void showResult(int iteration, double precision, double result) {
+        final String plural = Language.plural(iteration, "ітерацію", "ітерації", "ітерацій");
+        showInfoMessage(
+                "Результат знайдений за " + iteration + " " + plural + ".",
+                "Результат з точністю " + precision + " дорівнює " + result
+        );
+    }
+
+    private void showProgress(int iteration, double result) {
+        showInfoMessage(
+                "Ітерація: " + iteration + ".",
+                "Орієнтовний корінь: " + result + "."
+        );
     }
 
     private void check() throws IllegalStateException {
