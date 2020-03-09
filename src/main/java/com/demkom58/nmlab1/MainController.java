@@ -104,7 +104,7 @@ public class MainController extends GuiController {
     }
 
     @FXML
-    public void tanget(MouseEvent event) {
+    public void tangent(MouseEvent event) {
         try {
             check();
         } catch (Exception e) {
@@ -172,7 +172,7 @@ public class MainController extends GuiController {
     }
 
     private void read() {
-        iteration = 0;
+        iteration = 1;
 
         String functionText = functionInput.getText();
         if (functionText.isBlank()) {
