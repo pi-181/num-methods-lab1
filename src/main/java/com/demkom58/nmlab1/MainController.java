@@ -34,6 +34,8 @@ public class MainController extends GuiController {
     private CheckBox onceCheckBox;
 
     private Function function;
+    private boolean functionSteam;
+
     private Expression expression;
     private double aInterval;
     private double bInterval;
@@ -192,10 +194,11 @@ public class MainController extends GuiController {
         final String plural = Language.plural(iteration, "ітерацію", "ітерації", "ітерацій");
 
         String numIterations = "Результат знайдений за " + iteration + " " + plural + ".";
-        String precisionResult = "Результат з точністю " + precision + " дорівнює " + result + ".";
+        String precisionResult = "Результат з точністю " + precision + " дорівнює " + result
+                + (functionSteam ? " та " + (-result) + ",\nоскільки функція парна." : ".");
 
         if (onceCheckBox.isSelected()) {
-            AlertUtil.showInfoMessage(numIterations + "\n" + precisionResult, String.join("\n", iterations));
+            AlertUtil.showInfoMessage(numIterations + "\n\n" + precisionResult, String.join("\n", iterations));
         } else {
             AlertUtil.showInfoMessage(numIterations, precisionResult);
         }
@@ -203,7 +206,10 @@ public class MainController extends GuiController {
 
     private void showProgress(int iteration, double result) {
         String iter = "Ітерація: " + iteration + ".";
-        String root = "Орієнтовний корінь: " + result + ".";
+        String root = functionSteam
+                ? "Орієнтовний корінь: " + result + " та " + (-result) + "."
+                : "Орієнтовний корінь: " + result + ".";
+
         if (onceCheckBox.isSelected()) {
             iterations.add(iter + " " + root);
             return;
@@ -320,8 +326,10 @@ public class MainController extends GuiController {
         a = aInterval;
         b = bInterval;
 
-        if (function.checkSyntax())
+        if (function.checkSyntax()) {
+            functionSteam = function.calculate(a) == function.calculate(-a);
             fillFunctionSeries(aInterval, bInterval);
+        }
     }
 
 }
