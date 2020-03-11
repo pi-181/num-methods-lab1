@@ -34,7 +34,7 @@ public class MainController extends GuiController {
     private CheckBox onceCheckBox;
 
     private Function function;
-    private boolean functionSteam;
+    private boolean functionSteam = true;
 
     private Expression expression;
     private double aInterval;
@@ -327,7 +327,10 @@ public class MainController extends GuiController {
         b = bInterval;
 
         if (function.checkSyntax()) {
-            functionSteam = function.calculate(a) == function.calculate(-a);
+            for (double i = a; i <= b; i++) {
+                functionSteam = functionSteam && function.calculate(i) == function.calculate(-i);
+            }
+
             fillFunctionSeries(aInterval, bInterval);
         }
     }
