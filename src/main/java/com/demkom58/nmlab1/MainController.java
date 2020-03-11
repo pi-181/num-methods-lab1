@@ -34,7 +34,7 @@ public class MainController extends GuiController {
     private CheckBox onceCheckBox;
 
     private Function function;
-    private boolean functionSteam = true;
+    private boolean functionSteam;
 
     private Expression expression;
     private double aInterval;
@@ -60,11 +60,13 @@ public class MainController extends GuiController {
 
     @FXML
     public void bisection(MouseEvent event) {
-        try {
-            check();
-        } catch (Exception e) {
-            AlertUtil.showErrorMessage(e);
-            return;
+        if (iteration == 1) {
+            try {
+                check();
+            } catch (Exception e) {
+                AlertUtil.showErrorMessage(e);
+                return;
+            }
         }
 
         double fa = function.calculate(a);
@@ -93,11 +95,13 @@ public class MainController extends GuiController {
 
     @FXML
     public void secant(MouseEvent event) {
-        try {
-            check();
-        } catch (Exception e) {
-            AlertUtil.showErrorMessage(e);
-            return;
+        if (iteration == 1) {
+            try {
+                check();
+            } catch (Exception e) {
+                AlertUtil.showErrorMessage(e);
+                return;
+            }
         }
 
         double fa = function.calculate(a);
@@ -138,11 +142,13 @@ public class MainController extends GuiController {
     @SuppressWarnings("unchecked")
     @FXML
     public void tangent(MouseEvent event) {
-        try {
-            check();
-        } catch (Exception e) {
-            AlertUtil.showErrorMessage(e);
-            return;
+        if (iteration == 1) {
+            try {
+                check();
+            } catch (Exception e) {
+                AlertUtil.showErrorMessage(e);
+                return;
+            }
         }
 
         final double fa = function.calculate(a);
@@ -328,7 +334,9 @@ public class MainController extends GuiController {
 
         if (function.checkSyntax()) {
             for (double i = a; i <= b; i++) {
-                functionSteam = functionSteam && function.calculate(i) == function.calculate(-i);
+                functionSteam = function.calculate(i) == function.calculate(-i);
+                if (!functionSteam)
+                    break;
             }
 
             fillFunctionSeries(aInterval, bInterval);
