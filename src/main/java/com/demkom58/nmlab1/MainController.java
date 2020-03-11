@@ -8,12 +8,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import org.mariuszgromada.math.mxparser.Expression;
 import org.mariuszgromada.math.mxparser.Function;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainController extends GuiController {
     @FXML
@@ -26,6 +30,8 @@ public class MainController extends GuiController {
     private TextField accuracyInput;
     @FXML
     private ExtendedLineChart<Double, Double> lineChart;
+    @FXML
+    private CheckBox onceCheckBox;
 
     private Function function;
     private Expression expression;
@@ -37,6 +43,8 @@ public class MainController extends GuiController {
     private double b;
 
     private int iteration = 1;
+
+    private List<String> iterations = new ArrayList<>();
 
     private XYChart.Series<Double, Double> functionSeries =
             new XYChart.Series<>("Функція", FXCollections.observableArrayList());
@@ -76,6 +84,9 @@ public class MainController extends GuiController {
         showProgress(iteration, x);
 
         iteration++;
+
+        if (onceCheckBox.isSelected())
+            bisection(event);
     }
 
     @FXML
@@ -117,6 +128,9 @@ public class MainController extends GuiController {
         showProgress(iteration, x);
 
         iteration++;
+
+        if (onceCheckBox.isSelected())
+            secant(event);
     }
 
     @SuppressWarnings("unchecked")
@@ -164,6 +178,9 @@ public class MainController extends GuiController {
 
         a = b;
         iteration++;
+
+        if (onceCheckBox.isSelected())
+            tangent(event);
     }
 
     @FXML
@@ -173,17 +190,26 @@ public class MainController extends GuiController {
 
     private void showResult(int iteration, double precision, double result) {
         final String plural = Language.plural(iteration, "ітерацію", "ітерації", "ітерацій");
-        AlertUtil.showInfoMessage(
-                "Результат знайдений за " + iteration + " " + plural + ".",
-                "Результат з точністю " + precision + " дорівнює " + result
-        );
+
+        String numIterations = "Результат знайдений за " + iteration + " " + plural + ".";
+        String precisionResult = "Результат з точністю " + precision + " дорівнює " + result + ".";
+
+        if (onceCheckBox.isSelected()) {
+            AlertUtil.showInfoMessage(numIterations + "\n" + precisionResult, String.join("\n", iterations));
+        } else {
+            AlertUtil.showInfoMessage(numIterations, precisionResult);
+        }
     }
 
     private void showProgress(int iteration, double result) {
-        AlertUtil.showInfoMessage(
-                "Ітерація: " + iteration + ".",
-                "Орієнтовний корінь: " + result + "."
-        );
+        String iter = "Ітерація: " + iteration + ".";
+        String root = "Орієнтовний корінь: " + result + ".";
+        if (onceCheckBox.isSelected()) {
+            iterations.add(iter + " " + root);
+            return;
+        }
+
+        AlertUtil.showInfoMessage(iter, root);
     }
 
     private void check() throws IllegalStateException {
@@ -238,6 +264,7 @@ public class MainController extends GuiController {
 
     private void read() {
         iteration = 1;
+        iterations.clear();
 
         if (!lineChart.getData().isEmpty())
             lineChart.setData(FXCollections.observableArrayList());
